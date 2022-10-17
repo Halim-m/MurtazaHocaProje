@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ETHER TRANSACTION DAPP</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+    <style>
+        body {
+            background-color: palevioletred;
+            font-family: tahoma;
+            font-size: 33px;
+            display: flex;
+            flex-direction: row;
+        }
+        button {
+            background-color: aquamarine;
+            font-size: 33px;
+            padding: 5px;
+            font-family: Impact;
+        }
+        input {
+            width: 25vw;
+            height: 30px;
+            font-size: 25px;
+            font-family: tahoma;
+            outline: none;
+        }
+     
+        button:hover {
+            background-color: yellow;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="readArea">
+        <button onclick="connectMetamask()">CONNECT TO METAMASK</button>
+        <p id="userArea">Status: Not connected to Metamask</p>
+
+        <p id="contractArea">Status: Not connected to Contract</p>
+
+        <p id="contractAccount">Contract Account: Not Connected to Contract</p>
+
+        <p id="balanceArea">Balance: Not Connected to Contract</p>
+        
+
+        <button onclick="depositContract()">buy Coffee </button><br>
+
+    </div>
+
+    <script>
+        let eklendiMi=false;
+        let yorumcu=[];
+
+        let account;
+        const connectMetamask = async () => {
+            if(window.ethereum !== "undefined") {
+                const accounts = await ethereum.request({method: "eth_requestAccounts"});
+                account = accounts[0];
+                document.getElementById("userArea").innerHTML = `User Account: ${account}`;
+                await connectContract();
+                await getContractAccount();
+                await getBalanceApple();
+
+            }
+        }
+
+        const connectContract = async () => {
+            const ABI = [
+	{
+		"inputs": [],
+		"name": "deposit",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+            const Address = "0x6f54b610909b8fE212D2fBc5A1c1299bB35B83B2";
+            window.web3 = await new Web3(window.ethereum);
+            window.contract = await new window.web3.eth.Contract(ABI, Address);
+            document.getElementById("contractArea").innerHTML = "Connected to Contract";
+        }
+
+        const getContractAccount = async () => {
+            const data = await window.contract.methods.getAddress().call();
+            document.getElementById("contractAccount").innerHTML = `Contract Account: ${data}`;
+        }
+
+        const getBalanceApple = async () => {
+            const data = await window.contract.methods.getBalance().call();
+            document.getElementById("balanceArea").innerHTML = `Contract Balance: ${data}`;
+        }
+
+        const depositContract = async () => {
+            const amount = 1000000000000000000;
+            const result = await window.contract.methods.deposit().send({from: account, value: amount});
+            console.log(result);
+            console.log(result.status);
+            console.log(typeof result);
+
+
+            if(result.status){
+                var x = document.createElement("INPUT");
+                x.setAttribute("type", "text");
+                x.setAttribute("id", "input");
+
+                var but = document.createElement("INPUT");
+                but.setAttribute("type", "submit");
+
+                but.setAttribute("onclick", "gonder()");
+
+                //const yorum = document.getElementById("paragraf1").value;
+
+             //   para.innerText = "This is a paragraph";
+             if(eklendiMi===false){
+             document.body.appendChild(x);
+             document.body.appendChild(but);
+             }
+
+            }
+        }
+        const gonder=() =>{
+            console.log("ben çaıştım");
+            const para = document.createElement("p");
+            const yorum = document.getElementById("input").value;
+            if(eklendiMi===false){
+            document.body.appendChild(para);
+            
+             }
+             eklendiMi=true;
+
+             if(!(yorumcu[0]===account)){
+                para.innerText = `${yorum} \n ${account} `
+                yorumcu.push(account);
+             }
+             else{
+                alert("birden fazla yorum yapamazsın");
+             }
+        
+        }
+        const withdraw = async () => {
+            const amount = document.getElementById("amountInput").value;
+            const address = document.getElementById("addressInput").value;
+            await window.contract.methods.withdraw(address, amount).send({from: account});
+        }
+
+    </script>
+   
+</body>
+</html>
