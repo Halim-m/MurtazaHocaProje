@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title>ETHER TRANSACTION DAPP</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+
+    <style>
+        body {
+            background-image: linear-gradient(rgb(178, 163, 70), rgb(255, 255, 253));
+            font-family: tahoma;
+            font-size: 33px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        button {
+            background-color: rgb(255, 255, 255);
+            font-size: 33px;
+            padding: 5px;
+            font-family: Impact;
+        }
+
+        input {
+            width: 25vw;
+            height: 30px;
+            font-size: 25px;
+            font-family: tahoma;
+            outline: none;
+        }
+
+        button:hover {
+            background-color: rgb(255, 196, 0);
+        }
+
+
+
+        #kapsay�c� {
+            margin: center;
+            margin-top: 5%;
+            margin-left: 40%;
+            margin-right: 40%;
+            position: relative;
+
+        }
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript" src="js/main.js">
+        import { connectMetamask, depositContract, withdraw } from "/js/main.js";
+
+    </script>
+
+    <div id="kapsayici">
+        <div id="readArea" class="pencil">
+            <button onclick="connectMetamask()">CONNECT TO METAMASK</button>
+            <p id="userArea">Status: Not connected to Metamask</p>
+
+            <img src="js/coffee.jpg" alt="noThing">
+            <button onclick="depositContract(200,7)">buy Coffee 1000 index 7</button>
+            <button onclick="depositContract(0.02,5)">buy Coffee 0.02ETH index 5</button>
+            <button onclick="depositContract(0.03,6)">buy gnch 0.03ETH index_6</button>
+
+
+            <p id="contractArea">Status: Not connected to Contract</p>
+
+            <p id="contractAccount">Contract Account: Not Connected to Contract</p>
+
+            <p id="balanceArea">Balance: Not Connected to Contract</p>
+
+            <button onclick="withdraw()">WITHDRAW ETHER TO ANY ADDRESS</button> <br>
+            <input type="text" id="addressInput" placeholder="Enter Address"> <br>
+            <input type="number" id="amountInput" placeholder="Enter Amount">
+
+        </div>
+        <div id="yorumsatir">
+
+        </div>
+    </div>
+</body>
+
+</html>
